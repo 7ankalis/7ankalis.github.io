@@ -35,7 +35,7 @@ social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
   name: Taha
-  email: taha.marouani@etudaint-enit.utm.tn # change to your email address
+  email: taha.marouani@etudiant-enit.utm.tn # change to your email address
   links:
     # The first element serves as the copyright owner's link
     - https://twitter.com/username # change to your Twitter homepage
@@ -151,6 +151,15 @@ paginate: 10
 
 # The base URL of your site
 baseurl: ""
+
+## Jekyll_compose section
+jekyll_compose:
+  default_front_matter:
+    drafts:
+      description:
+      category:
+      tags:
+
 
 # ------------ The following options are not recommended to be modified ------------------
 
