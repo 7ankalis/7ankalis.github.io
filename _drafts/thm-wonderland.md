@@ -6,4 +6,4 @@ category:
 tags:
 ---
 # Wonderland 
-<img src="/assets/images/wonderland-1.png" alt="">
+<img src="{{site.baseurl}}/assets/images/wonderland-1.png">
