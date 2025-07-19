@@ -6,4 +6,4 @@ category:
 tags:
 ---
 # Wonderland 
-![Nmap Output](/assets/wonderland-1.png)
+![Nmap Output](assets/wonderland-1.png)
