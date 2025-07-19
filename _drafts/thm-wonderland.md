@@ -6,5 +6,4 @@ category:
 tags:
 ---
 # Wonderland 
-
-![Nmap Output](/assets/images/wonderland-1.png)
+<img src="/assets/images/Wonderland-1.png" alt="">
