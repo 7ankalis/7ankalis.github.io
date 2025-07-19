@@ -6,4 +6,4 @@ category:
 tags:
 ---
 # Wonderland 
-<img src="{{site.baseurl}}/wonderland-1.png">
+![Nmap Output](/_posts/wonderland-1.png)
