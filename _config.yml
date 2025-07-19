@@ -150,9 +150,9 @@ pwa:
 paginate: 10
 
 # The base URL of your site
-baseurl: ""
+baseurl: "https://github.com/7ankalis/7ankalis.github.io/"
 
-# Jekyll_compose section
+## Jekyll_compose section
 jekyll_compose:
   default_front_matter:
     drafts:
