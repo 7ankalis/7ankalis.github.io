@@ -6,4 +6,4 @@ category:
 tags:
 ---
 # Wonderland 
-![](/assets/images/wonderland-1.png)
+![](https://github.com/7ankalis/assets/blob/main/wonderland/wonderland-1.png)
