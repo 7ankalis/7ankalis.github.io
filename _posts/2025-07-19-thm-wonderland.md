@@ -43,8 +43,7 @@ PORT   STATE SERVICE REASON  VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-![Nmap Output](assets/img/wonderland/wonderland-1.png)
-
+![Nmap Output](https://github.com/7ankalis/assets/blob/main/wonderland/wonderland-1.png)
 Okay then let's follow the white rabbit. To fuzzing now. Normally at this point we like to leave a UDP scan to run in the background or a full ports TCP scan and proceed further in our enumeration because nmap only scans the first top 1000 ports. We could possibly miss something if we only check those ports. For this machine the scan lead to nothing so you should step over that part and think about it for the next machines :smile:.
 
 ### Fuzzing
