@@ -1,26 +1,23 @@
 ---
 layout: post
-title: htb-escapetwo
-description: My first Ad machine
+title: HackTheBox EscapeTwo 
+description: My first AD machine. 
 category: writeups
-tags: ad, windows, bloodhound
+tags: ad, windows, bloodhound, mssql, nmap, 
 date: 2025-07-20 20:36 +0100
 ---
 # EscapeTwo
 
 ![caption](assets/htb-escapetwo-1.png)
 
-## TL;DR
 
->As it is <mark style="color:purple;">**my first ever AD machine**</mark>, this was really interesting, painful, rewarding.
+>TL;Directory
+As it is <mark style="color:purple;">**my first ever AD machine**</mark>, this was really interesting, painful, rewarding.
 And I learned A LOT, really a lot about <mark style="color:purple;">**AD, ADCS, Kerberos, ADCS Templates**</mark> and bunch of other stuff. It is just so confusing how much info can a simple user on AD retrieve tons of information with the classic privileges.
 {: .prompt-info }
 
 ## Enumeration
 
-***
-
-***
 
 ### Nmap
 
