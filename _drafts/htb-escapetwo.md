@@ -12,7 +12,7 @@ tags: ad, windows, bloodhound
 
 ## TL;DR
 
-> As it is **my first ever AD machine**, this was really interesting, painful, rewarding.
+>As it is **my first ever AD machine**, this was really interesting, painful, rewarding.
 And I learned A LOT, really a lot about **AD, ADCS, Kerberos, ADCS Templates** and bunch of other stuff. It is just so confusing how much info can a simple user on AD retrieve tons of information with the classic privileges.
 {: .prompt-info }
 
@@ -56,7 +56,7 @@ Before we proceed with our enumeration, we should add these entries to the `/etc
 
 ![caption](assets/htb-escapetwo-4.png)
 
-> You should note that adding the CA in here was a mistake I didn't notice only after a while. It is not a FQDN and not resolvable so adding it does nothing.
+>You should note that adding the CA in here was a mistake I didn't notice only after a while. It is not a FQDN and not resolvable so adding it does nothing.
 {: .prompt-danger }
 
 ### LDAP
@@ -239,7 +239,7 @@ Now evilwin-rm works and we get the user flag:
 evil-winrm -i 10.10.11.51 -u ryan -p 'password'
 ```
 
-> **User pwned.**
+>**User pwned.**
 {: .prompt-tip }
 
 ***
@@ -363,6 +363,6 @@ certipy-ad auth -pfx administrator_10.pfx  -domain sequel.htb
 
 ![caption](assets/htb-escapetwo-25.png)
 
-> **Such a tiring, rewarding and fun machine! Rooted**
+>Such a tiring, rewarding and fun machine! Rooted
 {: .prompts-tip }
 
