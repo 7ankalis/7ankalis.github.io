@@ -15,6 +15,8 @@ date: 2025-07-19 18:16 +0100
 {: .prompt-tip }     
 Pwned successfully!
 
+![Nmap Output](assets/htb-escapetwo-1.png)
+
 ## Enumeration
 
 ```bash
