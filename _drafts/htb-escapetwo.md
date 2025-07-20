@@ -1,12 +1,10 @@
 ---
 layout: post
-title: htb-escapetwo 
-description: HTB EscapeTwo machine writeup. 
+title: htb-escapetwo
+description: My first Ad machine
 category: writeups
-tags: windows, ad, bloodhound 
-date: 2025-07-20 02:16 +0100
+tags: ad, windows, bloodhound
 ---
-
 
 # EscapeTwo
 
@@ -367,3 +365,4 @@ certipy-ad auth -pfx administrator_10.pfx  -domain sequel.htb
 
 > **Such a tiring, rewarding and fun machine! Rooted**
 {: .prompt-success }
+
