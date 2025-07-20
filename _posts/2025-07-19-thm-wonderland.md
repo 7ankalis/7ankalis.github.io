@@ -95,7 +95,6 @@ Okay root flag file in the home directory? Strange. How to deal with strange? Be
 ![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-9.png?raw=true)
 
 
-<mark style="color:green;">User flag acquired.</mark>
 
 ## Lateral Movement
 
@@ -142,7 +141,6 @@ $ sudo -u rabbit /usr/bin/python3.6 /home/alice/walrus_and_the_carpenter.py
 ![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-14.png?raw=true)
 
 
-<mark style="color:green;">Okay we're moving laterally</mark> :smile:
 
 ### 3rd User - Hatter
 
@@ -209,5 +207,4 @@ So, i simple perl script that sets the hatter user ID to 0 will bypass all the p
 ![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-20.png?raw=true)
 
 
-<mark style="color:green;">Rooted</mark> :smile: :tada:
 
