@@ -42,7 +42,7 @@ PORT   STATE SERVICE REASON  VERSION
 |_http-title: Follow the white rabbit.
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-1.png?raw=true)
+![Nmap Output](assets/thm-wonderland-1.png)
 
 Okay then let's follow the white rabbit. To fuzzing now. Normally at this point we like to leave a UDP scan to run in the background or a full ports TCP scan and proceed further in our enumeration because nmap only scans the first top 1000 ports. We could possibly miss something if we only check those ports. For this machine the scan lead to nothing so you should step over that part and think about it for the next machines :smile:.
 
@@ -63,36 +63,36 @@ $ffuf -w <wordlist.txt>:FUZZ -u http://wonderland.thm/FUZZ -c -v
 ```
 
 The command above will return the following directories:&#x20;
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-2.png?raw=true)
+![Nmap Output](assets/thm-wonderland-2.png)
 
 
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-3.png?raw=true)
+![Nmap Output](assets/thm-wonderland-3.png)
 
 The `/img` directory was also clear to find when inspecting the home page.
 
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-4.png?raw=true)
+![Nmap Output](assets/thm-wonderland-4.png)
 
 Containing the following files:
 
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-5.png?raw=true)
+![Nmap Output](assets/thm-wonderland-5.png)
 
 Looking for fuzzing the other sub directories we find the following pattern:
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-6.png?raw=true)
+![Nmap Output](assets/thm-wonderland-6.png)
 
 Intuitively, checking the source code of every directory we find, we stumble upon what seems to be Clear-text Credentials of user Alice:
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-7.png?raw=true)
+![Nmap Output](assets/thm-wonderland-7.png)
 
 
 ## Foothold/user flag - Alice
 
 Since for now we didn't find any login portal, ssh is the only way we could possibly gain a foothold. Which was successful!
 
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-8.png?raw=true)
+![Nmap Output](assets/thm-wonderland-8.png)
 
 
 Okay root flag file in the home directory? Strange. How to deal with strange? Be even more strange:
 
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-9.png?raw=true)
+![Nmap Output](assets/thm-wonderland-9.png)
 
 
 
@@ -103,13 +103,13 @@ Okay root flag file in the home directory? Strange. How to deal with strange? Be
 ```bash
 find / -perm -4000 2>/dev/null
 ```
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-10.png?raw=true)
+![Nmap Output](assets/thm-wonderland-10.png)
 
 
 ```bash
 find / -perm -2000 2>/dev/null
 ```
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-11.png?raw=true)
+![Nmap Output](assets/thm-wonderland-11.png)
 
 
 Nothing in here.
@@ -121,13 +121,13 @@ The command below tells us what binaries we can run as sudoers (if misconfigured
 ```bash
 $sudo -l
 ```
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-12.png?raw=true)
+![Nmap Output](assets/thm-wonderland-12.png)
 
 
 Okay, if we find a way to exploit the `walrus*.py` file and combine it with sudo command as `rabbit` user, we could get a shell as `rabbit`. Let's enumerate further.
 
 Running the python script and checking the source code, we found nothing BUT thee first line:
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-13.png?raw=true)
+![Nmap Output](assets/thm-wonderland-13.png)
 
 
 This will lead to <mark style="color:red;">module shadowing</mark>, which is exploiting the way python imports modules, tricking the interpreter to import a local version of the random module. This is due to the random module is a `.py` file not a precompiled binary(built-in). Here's some resources to dive more into that vulnerability:
@@ -138,14 +138,14 @@ This will lead to <mark style="color:red;">module shadowing</mark>, which is exp
 $echo "import os;os.system('/bin/sh')" > random.py
 $ sudo -u rabbit /usr/bin/python3.6 /home/alice/walrus_and_the_carpenter.py
 ```
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-14.png?raw=true)
+![Nmap Output](assets/thm-wonderland-14.png)
 
 
 
 ### 3rd User - Hatter
 
 Intuitively checking the rabbit's home directory:
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-15.png?raw=true)
+![Nmap Output](assets/thm-wonderland-15.png)
 
 
 Alright, no `strings` command, no `binwalk`, no `ltrace`, no `strace`. we gotta transfer this file to our local machine.
@@ -164,10 +164,10 @@ compromized-host$python3 -m http.server
 ```bash
 attacking-machine$wget http://target-ip:8000/teaParty
 ```
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-16.png?raw=true)
+![Nmap Output](assets/thm-wonderland-16.png)
 
 
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-17.png?raw=true)
+![Nmap Output](assets/thm-wonderland-17.png)
 
 
 Okay, no need to debug or anything, we got something interesting:
@@ -186,15 +186,15 @@ compromized-host$chmod +x /tmp/date
 compromized-host$export PATH=/tmp:$PATH
 compromized-host$./teaParty
 ```
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-18.png?raw=true)
+![Nmap Output](assets/thm-wonderland-18.png)
 
 
 Now with the cleartext credentials on the home directory we ssh into the server with hatter user.
 
 ## Privilege Escalation
 
-After getting the [linpeas.sh](https://github.com/peass-ng/PEASS-ng/tree/master/linPEAS) script on the machine using one of the methods we [mentioned](wonderland.md#file-transfer). We get interesting vulnerable stuff:
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-19.png?raw=true)
+After getting the [linpeas.sh](https://github.com/peass-ng/PEASS-ng/tree/master/linPEAS) script on the machine using one of the methods we. We get interesting vulnerable stuff:
+![Nmap Output](assets/thm-wonderland-19.png)
 
 
 > Traditionally, a Linux process is either privileged (running as root) or unprivileged. Privileged processes are not subject to kernel permission checks, and thus have full power over a system. A capability is a distinct and independent privilege that can be used by a process to bypass certain permission checks. Capabilities were first introduced in Linux 2.2, and several more were added in later versions. They are usually set on executable files and are automatically granted to the process when a file with a capability is executed. Capabilities essentially divide the power of the root user into separate privileges, which improves security by limiting the access an attacker would gain by exploiting or abusing a service
@@ -204,7 +204,7 @@ So, i simple perl script that sets the hatter user ID to 0 will bypass all the p
 ```bash
 /usr/bin/perl5.26.1 -e 'use POSIX qw(setuid); POSIX::setuid(0); exec "/bin/sh";'
 ```
-![Nmap Output](https://github.com/7ankalis/assets/blob/main/pages/thm/wonderland-20.png?raw=true)
+![Nmap Output](assets/thm-wonderland-20.png)
 
 
 
