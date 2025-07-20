@@ -4,8 +4,8 @@ title: htb-escapetwo
 description: My first Ad machine
 category: writeups
 tags: ad, windows, bloodhound
+date: 2025-07-20 19:15 +0100
 ---
-
 # EscapeTwo
 
 ![caption](assets/htb-escapetwo-1.md)
