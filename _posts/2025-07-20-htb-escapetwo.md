@@ -236,7 +236,7 @@ evil-winrm -i 10.10.11.51 -u ryan -p 'password'
 ```
 
 >**User pwned.**
-{: .prompt-success }
+{: .prompt-tip }
 
 ***
 
@@ -360,5 +360,5 @@ certipy-ad auth -pfx administrator_10.pfx  -domain sequel.htb
 ![caption](assets/htb-escapetwo-25.png)
 
 >**Such a tiring, rewarding and fun machine! Rooted**
-{: .prompt-success }
+{: .prompt-tip }
 
