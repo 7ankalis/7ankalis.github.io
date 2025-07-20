@@ -12,13 +12,11 @@ date: 2025-07-20 20:36 +0100
 
 ## TL;DR
 
->TL;DR
-As it is <mark style="color:purple;">**my first ever AD machine**</mark>, this was really interesting, painful, rewarding.
+>As it is <mark style="color:purple;">**my first ever AD machine**</mark>, this was really interesting, painful, rewarding.
 And I learned A LOT, really a lot about <mark style="color:purple;">**AD, ADCS, Kerberos, ADCS Templates**</mark> and bunch of other stuff. It is just so confusing how much info can a simple user on AD retrieve tons of information with the classic privileges.
 {: .prompt-info }
 
 ## Enumeration
-
 
 ### Nmap
 
