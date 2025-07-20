@@ -12,8 +12,8 @@ tags: ad, windows, bloodhound
 
 ## TL;DR
 
-> As it is <mark style="color:purple;">**my first ever AD machine**</mark>, this was really interesting, painful, rewarding.
-And I learned A LOT, really a lot about <mark style="color:purple;">**AD, ADCS, Kerberos, ADCS Templates**</mark> and bunch of other stuff. It is just so confusing how much info can a simple user on AD retrieve tons of information with the classic privileges.
+> As it is **my first ever AD machine**, this was really interesting, painful, rewarding.
+And I learned A LOT, really a lot about **AD, ADCS, Kerberos, ADCS Templates** and bunch of other stuff. It is just so confusing how much info can a simple user on AD retrieve tons of information with the classic privileges.
 {: .prompt-info }
 
 ## Enumeration
@@ -216,7 +216,7 @@ At this point I repeated exactly everything we did with the user rose, smb, evil
 
 ## Foothold - User flag
 
-Given the valid credentials of oscar user which I thought were useless, we can indeed brute force the smb service with the valid creds we had from the beginning <mark style="color:red;">**WITH THE PASSWORD WE JUST FOUND**</mark>. So after adding the new entries to the users and passwords files we run:
+Given the valid credentials of oscar user which I thought were useless, we can indeed brute force the smb service with the valid creds we had from the beginning **WITH THE PASSWORD WE JUST FOUND**. So after adding the new entries to the users and passwords files we run:
 
 ```bash
  nxc smb 10.10.11.51 --rid-brute -u users.txt -p pass.txt                       
@@ -239,8 +239,8 @@ Now evilwin-rm works and we get the user flag:
 evil-winrm -i 10.10.11.51 -u ryan -p 'password'
 ```
 
-> U<mark style="color:green;">**ser pwned.**</mark>
-{: .prompt-success }
+> **User pwned.**
+{: .prompt-tip }
 
 ***
 
@@ -317,7 +317,7 @@ impacket-dacledit  -action 'write' -rights 'FullControl' -principal 'ryan' -targ
 
 #### Step 3:
 
-We will be performing Shadow Credentials attack to get an <mark style="color:red;">**NT hash**</mark> of the **`ca_svc`** account.
+We will be performing Shadow Credentials attack to get an **NT hash** of the **`ca_svc`** account.
 
 ```bash
 certipy-ad shadow auto -u 'ryan@sequel.htb' -p "password" -account 'ca_svc' -dc-ip '10.10.11.51'
@@ -364,5 +364,5 @@ certipy-ad auth -pfx administrator_10.pfx  -domain sequel.htb
 ![caption](assets/htb-escapetwo-25.png)
 
 > **Such a tiring, rewarding and fun machine! Rooted**
-{: .prompt-success }
+{: .prompts-tip }
 
