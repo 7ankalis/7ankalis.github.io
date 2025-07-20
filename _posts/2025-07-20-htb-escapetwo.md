@@ -235,7 +235,7 @@ Now evilwin-rm works and we get the user flag:
 evil-winrm -i 10.10.11.51 -u ryan -p 'password'
 ```
 
-><mark style="color:green;">**User pwned.**</mark>
+>**User pwned.**
 {: .prompt-success }
 
 ***
