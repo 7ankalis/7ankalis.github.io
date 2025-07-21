@@ -1,12 +1,15 @@
 ---
 layout: post
-title: HackTheBox Sherlock Teamwork
+title: HackTheBox Sherlock : Teamwork
 description: Threat Intelligence Investigation
+media_subpath: assets
+image:
+    path: htb-teamwork-1.png
+    alt: Threat Intelligence
 category: Blue Team
-tags: blueteam threat-intel sherlock hackthebox
+tags: blueteam threat-intel sherlock hackthebox mitre supply-chain-attack
 date: 2025-07-21 20:03 +0100
 ---
-![](assets/htb-teamwork-1.png)
 # Teamwork
 ## Scenario and handout
 >It is Friday afternoon and the SOC at Edny Consulting Ltd has received alerts from the workstation of Jason Longfield, a software engineer on the development team, regarding the execution of some discovery commands. Jason has just gone on holiday and is not available by phone. The workstation appears to have been switched off, so the only evidence we have at the moment is an export of his mailbox containing today's messages. As the company was recently the victim of a supply chain attack, this case is being taken seriously and the Cyber Threat Intelligence team is being called in to determine the severity of the threat.
@@ -83,20 +86,31 @@ So, this thing has a name, or better say a Mitre ATT&CK tactic: **Resource Devel
 ### Infrastructure 
 So, it is time to search for that domain and dig more into the infrastrucutre. Going to the [waybackmachine](https://web.archive.org/web/20250204120033/https://developingdreams.site/) we get a hit and see the saved website with the `DeTankWar` game in "beta" release as the threat actor said in the phishing mail.
 ![waybackmachine](assets/htb-teamwork-2.png)
+__Recovered website page__
 ![waybackmachine](assets/htb-teamwork-3.png)
+__The lovely Team__
 ![waybackmachine](assets/htb-teamwork-4.png)
-
+__The malicious file game__
 And a suspended X account. Perfect. This maps to MITRE's subtechnique called **Establish Accounts.Social Media Accounts** T1585.001
 ![waybackmachine](assets/htb-teamwork-5.png)
+__Suspended X account__
 
 ***
+
 ### Malware
 So, unzipping the given archive with the password mentionned in mail, we get `beta_release_v.1.32.exe` A PE32+ executable (GUI) x86-64, for MS Windows, with a sha256 hash value of **56554117d96d12bd3504ebef2a8f28e790dd1fe583c33ad58ccbf614313ead8c**. The act of hosting themalware artifacts is in itself a tactic called **Stage Capabilities.Upload** malware which maps to **T1608.001**
-So going into thevirustotal, we get a ton of information dating back to that same period the mail and the whole infrastructure was set.
+
+
+So going into VirusTotal, we get a ton of information dating back to that same period the mail and the whole infrastructure was set.
+
 And most importatly, this [link](https://www.microsoft.com/en-us/security/blog/2024/05/28/moonstone-sleet-emerges-as-new-north-korean-threat-actor-with-new-bag-of-tricks/) referencing Microsoft's analysis on a Norht Korean threat actor called Moonstone Sleet and how they trojanized PuTTY as a new weapon. This technique maps to MITRE's suppply chain compromise Technique which can be found [here](https://attack.mitre.org/techniques/T1195/) which was mentionned in the description as the company got hit by a supply chain attack. Specififcally **T1195.001**
+
 Going a bit further for the other supply chain attacks in 2024, using Microsoft's and Kaspersky's threat reports, I found [this](https://securelist.com/ksb-story-of-the-year-2024/114883/) link to see all of the supply chain attacks per Kaspersky.
 We found several attacks, of course. But the most relevant one was the JavaScript abuse since I know the pager attacks that happened earlier in 2024 (Free Palestine), the xz backdoor..etc.
-Reading up more on this massive attacks in [here](https://censys.com/blog/july-2-polyfill-io-supply-chain-attack-digging-into-the-web-of-compromised-domains) leads to the answer: npm 
+
+Reading up more on this massive attacks in [here](https://censys.com/blog/july-2-polyfill-io-supply-chain-attack-digging-into-the-web-of-compromised-domains) leads to the answer: npm
+
+
 Finally, this is the gem i found after some google dorking: <https://securitylabs.datadoghq.com/articles/stressed-pungsan-dprk-aligned-threat-actor-leverages-npm-for-initial-access/> 
 This shows the full report of how everything about this supply chain attack worked.
 the cherry on the top: T1218.011 to finish things off and evade defenses using a legitimate signed windows binary `rundll32.exe`
