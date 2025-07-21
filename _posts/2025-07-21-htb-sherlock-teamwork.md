@@ -32,7 +32,7 @@ Your New Online Project Management Tool Smartsheet.eml'
 Your online event invitation for "Sync before Jason holiday Software Development Progress and Insights".eml'
 ```
 
----
+***
 
 ## Analysis
 
@@ -78,7 +78,7 @@ The thing I think is important to see here is the registration time. It was regi
 So this might be a part of the infrastructure of the threat actor.
 So, this thing has a name, or better say a Mitre ATT&CK tactic: **Resource Development** and to be more specific with the technique in here: **Acquire Infrastructure.Domains** which maps to **T1583.001**
 
----
+***
 
 ### Infrastructure 
 So, it is time to search for that domain and dig more into the infrastrucutre. Going to the [waybackmachine](https://web.archive.org/web/20250204120033/https://developingdreams.site/) we get a hit and see the saved website with the `DeTankWar` game in "beta" release as the threat actor said in the phishing mail.
@@ -89,7 +89,7 @@ So, it is time to search for that domain and dig more into the infrastrucutre. G
 And a suspended X account. Perfect. This maps to MITRE's subtechnique called **Establish Accounts.Social Media Accounts** T1585.001
 ![waybackmachine](assets/htb-teamwork-5.png)
 
----
+***
 ### Malware
 So, unzipping the given archive with the password mentionned in mail, we get `beta_release_v.1.32.exe` A PE32+ executable (GUI) x86-64, for MS Windows, with a sha256 hash value of **56554117d96d12bd3504ebef2a8f28e790dd1fe583c33ad58ccbf614313ead8c**. The act of hosting themalware artifacts is in itself a tactic called **Stage Capabilities.Upload** malware which maps to **T1608.001**
 So going into thevirustotal, we get a ton of information dating back to that same period the mail and the whole infrastructure was set.
