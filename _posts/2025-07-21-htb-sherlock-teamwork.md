@@ -84,10 +84,13 @@ So, this thing has a name, or better say a Mitre ATT&CK tactic: **Resource Devel
 So, it is time to search for that domain and dig more into the infrastrucutre. Going to the [waybackmachine](https://web.archive.org/web/20250204120033/https://developingdreams.site/) we get a hit and see the saved website with the `DeTankWar` game in "beta" release as the threat actor said in the phishing mail.
 ![waybackmachine](assets/htb-teamwork-2.png)
 __Recovered website page__
+
 ![waybackmachine](assets/htb-teamwork-3.png)
 __The lovely Team__
+
 ![waybackmachine](assets/htb-teamwork-4.png)
 __The malicious file game__
+
 And a suspended X account. Perfect. This maps to MITRE's subtechnique called **Establish Accounts.Social Media Accounts** T1585.001
 
 ![waybackmachine](assets/htb-teamwork-5.png)
