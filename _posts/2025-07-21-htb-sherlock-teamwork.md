@@ -2,10 +2,7 @@
 layout: post
 title: HackTheBox Sherlock : Teamwork
 description: Threat Intelligence Investigation
-media_subpath: assets
-image:
-    path: htb-teamwork-1.png
-    alt: Threat Intelligence
+image: assets/htb-sherlock-1.png
 category: Blue Team
 tags: blueteam threat-intel sherlock hackthebox mitre supply-chain-attack
 date: 2025-07-21 20:03 +0100
@@ -92,14 +89,16 @@ __The lovely Team__
 ![waybackmachine](assets/htb-teamwork-4.png)
 __The malicious file game__
 And a suspended X account. Perfect. This maps to MITRE's subtechnique called **Establish Accounts.Social Media Accounts** T1585.001
+
 ![waybackmachine](assets/htb-teamwork-5.png)
+
 __Suspended X account__
+
 
 ***
 
 ### Malware
 So, unzipping the given archive with the password mentionned in mail, we get `beta_release_v.1.32.exe` A PE32+ executable (GUI) x86-64, for MS Windows, with a sha256 hash value of **56554117d96d12bd3504ebef2a8f28e790dd1fe583c33ad58ccbf614313ead8c**. The act of hosting themalware artifacts is in itself a tactic called **Stage Capabilities.Upload** malware which maps to **T1608.001**
-
 
 So going into VirusTotal, we get a ton of information dating back to that same period the mail and the whole infrastructure was set.
 
