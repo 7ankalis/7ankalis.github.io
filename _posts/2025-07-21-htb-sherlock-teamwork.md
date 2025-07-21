@@ -1,8 +1,9 @@
 ---
 layout: post
-title: HackTheBox Sherlock : Teamwork
+title: HackTheBox Sherlock - Teamwork
 description: Threat Intelligence Investigation
 category: Blue Team
+image: assets/htb-teamwork-1.png:> [!WARNING]
 tags: blueteam threat-intel sherlock hackthebox mitre supply-chain-attack
 date: 2025-07-21 20:03 +0100
 ---
