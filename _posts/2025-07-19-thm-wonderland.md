@@ -2,7 +2,7 @@
 layout: post
 title: thm-wonderland
 description: THM Wonderland machine writeup. 
-category: writeups
+category: Writeups
 tags: python, suid, 
 date: 2025-07-19 18:16 +0100
 ---

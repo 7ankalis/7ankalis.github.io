@@ -2,7 +2,7 @@
 layout: post
 title: HackTheBox EscapeTwo 
 description: My first AD machine. 
-category: writeups
+category: Writeups
 image: assets/htb-escapetwo-preview.webp
 tags: ad, windows, bloodhound, mssql, nmap, 
 date: 2025-07-20 20:36 +0100
