@@ -1,9 +1,10 @@
 ---
 layout: post
-title: thm-wonderland
+title: TryHackMe Wonderland
 description: THM Wonderland machine writeup. 
 category: Writeups
-tags: python, suid, 
+tags: python suid pivot privilege-escalation
+image: assets/thm-wonderland-preview.jpeg
 date: 2025-07-19 18:16 +0100
 ---
 # Wonderland 
