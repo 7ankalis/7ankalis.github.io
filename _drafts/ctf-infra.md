@@ -4,6 +4,7 @@ title: ctf-infra
 description: Building a CTF infrastructure
 category: CTF
 tags: ctf docker azure infrastructure cloudflare cloud
+image: assets/cat-the-flag.jpg
 ---
 # Building A Free CTF Infrastructure
 ## Skills developed
@@ -31,7 +32,7 @@ We'll deploy Ubuntu servers from Microsoft Azure, register a domain name from [N
 
 Here is a small overview of what it can look like:
 
-![infra](assets/infra.drawio.png)
+![infra](assets/Infra.drawio.png)
 
 So as seen above:
 
@@ -54,7 +55,7 @@ But, this also connects all of the machines in that resource group to the same p
 Connecting the machines together opens up the possibility of Pivoting and Lateral movement by the one targetting our infrastructure.
 
 >Consider this when doing a home lab or authoring a challenge where you need some pivoting, tunneling and shit.
-{: .prompt-hint }
+{: .prompt-tip }
 
 
 ![azure1.png](assets/azure1.png)
@@ -196,7 +197,7 @@ What's next?
 - Cloudlflare.
 - Launch the challenge askers for the players to connect with `nc`.
 I'll be adding that in the next few days. 3alakhir.
-{: .prompt-hint}
+{: .prompt-tip}
 <https://www.youtube.com/watch?v=7m1UpqIkK3c&list=RDMM7m1UpqIkK3c&start_radio=1>
 
 
