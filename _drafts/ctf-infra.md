@@ -47,7 +47,6 @@ Of course, you can seperate categories depedning on your needs, If for exmaple y
 
 ## Setting up the instances
 ### CTFd Server 
-R
 We'll start off with the CTFd web interface.
 
 Before discussing the resource allocation, te `resource group` is really important. It give us the ability to manage all of the VMs from a single resource group form a single portal.
@@ -63,7 +62,7 @@ Connecting the machines together opens up the possibility of Pivoting and Latera
 ![azure1.png](assets/azure1.png)
 
 So, depending on your needs, choose the resources for you VM. As for connectivity, You can choose which way you want to access your asset: key or passsword.
-For reference, for the Friendly CTF we hosted: Cat The Flag By Securinets ENIT, we deployed a 2 cpu, 4GB Ram Ubuntu machine which was more than enough for more than 100 teams of 4.
+For reference, for the Friendly CTF we hosted: Cat The Flag By [Securinets ENIT](https://www.facebook.com/profile.php?id=61574109616239), we deployed a 2 cpu, 4GB Ram Ubuntu machine which was more than enough for more than 100 teams of 4.
 
 Be sure to open `SSH`, `HTTP` and `HTTPS` so we can access the web portal. You can setup more firewall rules in the Network Settings section of the VM.
 
@@ -92,7 +91,7 @@ Now we need to install CTFd, which is as simple as cloning the repo and installi
 ```bash
 git clone https://github.com/CTFd/CTFd
 ```
-
+#### Virtual Environment - requirements installation
 As specified in the documentation, we need to install the requirements found `requirements.txt` using `pip`.
 
 We need to install `pip`. Many methods can be found [here](https://pip.pypa.io/en/stable/installation/). 
@@ -112,7 +111,6 @@ For this we'll need python's module `venv`
 ```bash
 sudo apt install python3.10-venv
 ```
-
 We're good to go:
 
 ```bash
@@ -123,7 +121,7 @@ python3 -m venv ctfd-venv
 source ctfd/bin/activate
 pip install -r requirement.txt
 ```
-
+#### Docker Engine
 Once the requirements are installed, we need docker engine in order to get the CTFd platform up and running.
 
 This can be done by running the commands provided [here](https://docs.docker.com/engine/install/ubuntu/)
@@ -155,6 +153,8 @@ bash docker_install.sh
 ```
 Once the installtion is complete, we should see a message from the hello-world image.
 
+#### Post Docker Installtion
+
 >This is our first mistake, we shouldn't be running any container using `sudo` as this is a not a good practice and poses a security risk.
 {: .prompt-warning }
 
@@ -172,6 +172,7 @@ We can enable docker(make it run at startup)
 sudo systemctl enable docker.service
 sudo systemctl enable containerd.service
 ```
+#### Deploying the web interface
 
 Now, that docker is installed, simply run
 
@@ -187,6 +188,7 @@ We used the `docker compose` utility because we a `docker-compose.yml` file. As 
 ```bash 
 docker run -p 8000:8000 -it ctfd/ctfd
 ```
+#### Configuration 
 
 Now navigating to your public IP address, you'll find your web portal from which you setup the admin account, your CTF rules..etc 
 
