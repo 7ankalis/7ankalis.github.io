@@ -349,7 +349,10 @@ int main() {
     return 0;
 }
 ```
-
+Statically compile: 
+```bash 
+gcc -g -static nvme.c -o nvme
+```
 2. Transfer it to the target machine with `scp` since we have `SSH` creds:
 
 ```bash
