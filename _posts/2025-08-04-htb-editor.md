@@ -340,8 +340,7 @@ mkdir ~/evilsal
 
 1. We setup and statically compile a C shell on our attacking machine:
 
-
-```C 
+```c 
 #include <unistd.h>
 
 int main() {
