@@ -2,11 +2,11 @@
 layout: post
 title: HackTheBox Editor
 description: Easy-rated HTB Machine.
-category: Labs 
+category: Labs
 tags: cve java groovy-code linux priv-esc fuzzing
-image: assets/htb-editor-preview.png 
+image: assets/htb-editor-preview.png
+date: 2025-08-04 19:04 +0100
 ---
-
 # Enumeration
 ```bash
 echo 10.10.11.80 editor.htb |sudo tee -a /etc/hosts
