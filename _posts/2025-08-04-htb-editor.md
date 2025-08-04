@@ -333,11 +333,13 @@ So, our goal is to add a malicious binary of our choice to the `PATH` variable, 
 Let's go:
 
 0. Create a directory somewhere we have R-W permissions on:
+
 ```bash 
 mkdir ~/evilsal
 ```
 
 1. We setup and statically compile a C shell on our attacking machine:
+
 
 ```C 
 #include <unistd.h>
