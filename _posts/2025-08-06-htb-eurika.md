@@ -230,7 +230,7 @@ eureka:
 
 And we connect to the forwarded service, to find a Goldmine: 
 
-![Here](assets/htb-eureka-13.png)
+![Here](assets/htb-eurika-13.png)
 
 Those were the services I was trying to forward alone without the `Eureka` service. 
 
