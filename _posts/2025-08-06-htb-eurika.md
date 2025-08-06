@@ -1,7 +1,7 @@
 ---
 layout: post
 title: HackTheBox - Eureka
-description: HackTheBox Hard Lab Writeup
+description: Hard-Rated HTB Machine 
 category: Labs
 tags: cloud eureka microservices privilege-escalation htb labs 
 image: assets/htb-eureka-preview.png
