@@ -7,13 +7,30 @@ tags: cloud eureka microservices privilege-escalation htb labs
 image: assets/htb-eureka-preview.png
 date: 2025-08-06 01:58 +0100
 ---
-## Enumeration
-### Nmap 
 
-<div style="padding: 10px; border: 2px dashed #4CAF50; background-color: #f0fff0;">
-  <h3 style="color: #4CAF50;">✅ HTML & CSS are working!</h3>
-  <p>This is a <strong>test box</strong> rendered inside a Markdown file.</p>
-</div>
+## TL;DR
+
+### Enumeration
+- Found open ports and identified Spring Boot via error pages.
+- Used `/etc/hosts` and fuzzing to discover actuator endpoints.
+
+### Foothold
+- Retrieved credentials from exposed diagnostics and heap dumps.
+- Logged in using valid creds.
+
+### Lateral Movement
+- Found internal services and configs.
+- Intercepted traffic via fake service registration.
+- Reused internal creds to pivot.
+
+### Privilege Escalation
+- Exploited a root script parsing writable logs.
+- Injected code for root access.
+
+
+## Enumeration
+
+### Nmap 
 
 
 ```bash 
