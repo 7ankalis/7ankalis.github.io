@@ -3,12 +3,18 @@ layout: post
 title: HackTheBox - Eureka
 description: HackTheBox Hard Lab Writeup
 category: Labs
-tags: cloud eureka microservices privilege-escalation
+tags: cloud eureka microservices privilege-escalation htb labs 
 image: assets/htb-eureka-preview.png
 date: 2025-08-06 01:58 +0100
 ---
-# Enumeration
-## Nmap 
+## Enumeration
+### Nmap 
+
+<div style="padding: 10px; border: 2px dashed #4CAF50; background-color: #f0fff0;">
+  <h3 style="color: #4CAF50;">✅ HTML & CSS are working!</h3>
+  <p>This is a <strong>test box</strong> rendered inside a Markdown file.</p>
+</div>
+
 
 ```bash 
 nmap $target -sV -sC -vv -Pn -oN eurika-default-scan
@@ -33,7 +39,7 @@ And we add the required entry on `/etc/hosts`
 ```bash 
 echo $target furni.htb eurika.htb | sudo tee -a /etc/hosts
 ```
-## Web Recon
+### Web Recon
 
 A bit further:
 
@@ -69,7 +75,7 @@ http://furni.htb [200 OK] Bootstrap, Content-Language[en-US], Country[RESERVED][
 
 Okay we have basic idea about the technology behind the web app.
 
-## Fuzzing
+### Fuzzing
 
 Both fuzzing for subdomains/vhosts and directories lead to nothing **at first**. Because I used the wrong wordlists.
 
@@ -112,7 +118,7 @@ information about resources of endpoints using `HTTP` urls not really a physical
 
 Within the `Actuator` endpoint, we can access even more endpoints like `/health`, `/info`...etc
 
-# Foothold
+## Foothold
 
 A bit more fuzzing and we find the stuff:
 
@@ -167,7 +173,7 @@ Simply, SSH into the machine using:
 ssh oscar190@furni.htb
 ```
 
-# Lateral Movement
+## Lateral Movement
 
 - `sudo -l` made the server laugh at me.
 - `find / -perm -4000 2>/dev/null` didn't lead to nothing either.
@@ -283,9 +289,9 @@ ssh miranda-wise@10.10.11.66
 {: .prompt-tip }
 
 
-# Privilege Escalation
+## Privilege Escalation
 
-## Recon 
+### Recon 
 
 Now aiming at the root user, the usual recon: 
 
@@ -515,7 +521,7 @@ miranda@target$ bash linpeas.sh
 ![here](/assets/htb-eurika-19.png)
 
 
-## PE Vector
+### PE Vector
 
 So, what do we have now: 
 
@@ -524,7 +530,7 @@ So, what do we have now:
 
 So if the script is vulnerable, we can overwrite that file with a malicious code to break the legit execution and perform whatever we can. 
 
-## Code Analysis 
+### Code Analysis 
 
 Here is the vulnerable function: 
 
