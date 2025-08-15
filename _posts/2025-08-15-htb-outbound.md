@@ -1,6 +1,6 @@
 ---
 layout: post
-title: htb-outbound
+title: HackTheBox Outbound 
 description: Easy-Rated HTB Machine
 category: Labs
 tags: linux privilege-escalation symlink webmail roundcube
