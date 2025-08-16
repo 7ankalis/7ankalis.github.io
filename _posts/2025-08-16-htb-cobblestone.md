@@ -7,7 +7,20 @@ tags: sqli sqlmap cobbler privilege escalation rce sql mysql mariadb hash hashca
 image: assets/htb-cobble-preview.png
 date: 2025-08-16 17:05 +0100
 ---
-# TL;DR 
+## TL;DR 
+
+- The web app had a SQL injection in the suggestion feature, exploitable with sqlmap.
+
+- Dumping the database revealed user credentials, including a hash.
+
+- Cracking the hash gave access to the foothold user shell.
+
+- On the system, the Cobbler service was running internally, which can be abused by manipulating system templates/profiles.
+
+- By exploiting Cobbler, it’s possible to execute commands as root.
+
+- To reach the Cobbler service, SSH port forwarding was required to expose the local/internal port for exploitation.
+
 
 ## Enumeration 
 
@@ -198,6 +211,7 @@ The only way it worked was to upload a bash reverse shell to the server, and the
 And proved correct:
 
 ![lekhraniya](assets/htb-cobble-14.png)
+
 ## Privilege Escalation
 
 For privilege escalation, we have a very restricted shell, which was painfully reallistic. Until.
@@ -209,12 +223,29 @@ ss -tulnp
 
 And we have a service at port `TCP/25115`. This was cobbler's used port. Check out what is the [Cobbler](https://cobbler.github.io/) service.
 
+>Cobbler is a Linux provisioning and deployment server designed to simplify the setup of network-based installations. It allows administrators to automatically install operating systems, manage system profiles, and configure network boot environments (PXE) across many machines. Key features include:
+- OS provisioning: Automates the installation of Linux distributions on bare-metal or virtual machines.
+
+- Profile management: Defines templates for system configurations, including packages, scripts, and network settings.
+
+- PXE boot integration: Supports network booting for unattended installations.
+
+- Template and scripting support: Uses templates (Cheetah) for scripts and configuration files to customize installations.
+
+- Essentially, Cobbler streamlines large-scale deployments, making it easier to manage multiple systems consistently and automatically.
+{: .prompt-tip }
+
 So to see what's being hosted in that port, we port forward it using: 
 ```bash 
 ssh -L 25115:localhost:25115 cobbler@cobblestone.htb
 ```
 
 Reading what's on [this](https://tnpitsecurity.com/blog/cobbler-multiple-vulnerabilities/) page, leads to the direct solution. 
+
+Here is what we're going to do: 
+>The privilege escalation relied on a critical vulnerability in Cobbler (≤ 3.2.1), which exposes an XML-RPC API for managing profiles, systems, and templates. The vulnerability arises because Cobbler’s generate_script method renders templates using Cheetah without proper input sanitization. This allows an attacker to perform a template injection, executing arbitrary Python code as the user running Cobbler (typically root). By crafting a malicious template and forcing Cobbler to render it—either through profile or system manipulation—the attacker could execute commands with root privileges, effectively taking full control of the system.
+{: .prompt-tip }
+
 
 ```python
 import xmlrpc.client
@@ -277,6 +308,37 @@ curl -X POST http://127.0.0.1:25151 \
 ```
 
 Within the request sent back to us, we will have the flag as a response within the XML returned. 
+
+The Python script interacts with Cobbler’s XML-RPC API to exploit the template rendering vulnerability. It performs several actions to manipulate the system configuration and template files:
+
+- **Login:**  
+  Uses `srv.login("", -1)` to authenticate with the Cobbler server (empty credentials are accepted for unauthenticated access).  
+
+- **Create a new distribution:**  
+  Calls `srv.new_distro(tok)` to create a custom distribution object, then sets fields such as:  
+  - `name` → “pwn_distro”  
+  - `arch` → “x86_64”  
+  - `breed` → “redhat”  
+  - `kernel` → path to the kernel (`/boot/vmlinuz-6.1.0-37-amd64`)  
+  - `initrd` → path to the initrd image (`/boot/initrd.img-6.1.0-37-amd64`)  
+  - Saves the distribution with `srv.save_distro(did, tok)`  
+
+- **Create a new profile:**  
+  Calls `srv.new_profile(tok)` and assigns the distribution, naming the profile “pwn_profile,” then saves it.  
+
+- **Create a new system:**  
+  Calls `srv.new_system(tok)` to register a system, sets:  
+  - `name` → “pwnsys”  
+  - `profile` → “pwn_profile”  
+  - `template_files` → a dictionary mapping the target file (`/root/root.txt`) to a location inside the template system (`/leak`)  
+  - Saves the system and calls `srv.sync(tok)` to apply changes.  
+
+- **Final curl command:**  
+  Sends a POST request to Cobbler’s XML-RPC endpoint to call `get_template_file_for_system` with the system name and the template path (`/leak`), causing Cobbler to render the template and return the contents of the target file.  
+
+This combination allows reading arbitrary files or potentially executing code because Cobbler renders templates as root, exploiting the template injection vulnerability.
+
+
 
 >Rooted!
 {: .prompt-tip }
