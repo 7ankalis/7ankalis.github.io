@@ -5,7 +5,6 @@ description: Building a CTF infrastructure
 category: CTF
 tags: ctf docker azure infrastructure cloudflare cloud
 image: assets/cat-the-flag.jpg
-date: 2025-07-30 15:21 +0100
 ---
 # Building A Free CTF Infrastructure
 ## Skills developed
